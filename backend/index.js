@@ -1,34 +1,22 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const connectToDB = require('./configs/db.config');
+const authRoutes = require('./routes/authRoute');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/auth');
 
 dotenv.config();
 
 const app = express();
-const PORT  = process.env.PORT
-const connectionString = process.env.DB_STRING
+const PORT = process.env.PORT || 5000;
 
-// midleware
+// Middleware
 app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
 
-// MongoDB Connection 
-const connectToDB = async () => {
-    try {
-        await mongoose.connect(connectionString, {
-            autoIndex: true
-        })
-        console.log('Connected to Mongodb Atlas');
-    } catch (error) {
-        console.error(error);
-    }
-}
-
+// MongoDB connection
 connectToDB();
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
